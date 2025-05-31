@@ -1,5 +1,4 @@
 "use client";
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 type Theme = "dark" | "light";
@@ -23,18 +22,45 @@ export function ThemeProvider({
   defaultTheme = "dark",
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(defaultTheme);
-
+  const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
+    try {
+      const storedTheme = localStorage.getItem("theme") as Theme | null;
+      if (storedTheme && (storedTheme === "dark" || storedTheme === "light")) {
+        setTheme(storedTheme);
+      }
+    } catch (error) {
+      console.warn("Failed to load theme from localStorage:", error);
+    } finally {
+      setIsLoaded(true);
+    }
+  }, []);
+  useEffect(() => {
+    if (!isLoaded) return;
     const root = window.document.documentElement;
-
     root.classList.remove("light", "dark");
     root.classList.add(theme);
-  }, [theme]);
+
+    // Save theme to localStorage //
+    try {
+      localStorage.setItem("theme", theme);
+    } catch (error) {
+      console.warn("Failed to save theme to localStorage:", error);
+    }
+  }, [theme, isLoaded]);
+
+  const handleSetTheme = (newTheme: Theme) => {
+    setTheme(newTheme);
+  };
 
   const value: ThemeProviderContextType = {
     theme,
-    setTheme,
+    setTheme: handleSetTheme,
   };
+
+  if (!isLoaded) {
+    return null;
+  }
 
   return React.createElement(
     ThemeProviderContext.Provider,

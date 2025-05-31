@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "@/hooks/theme-provider";
 import { usePathname } from "next/navigation";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const MenuItem = [
   {
@@ -45,12 +46,14 @@ const MenuItem = [
   {
     name: "Login",
     icon: LogIn,
-    path: "/login",
+    path: "/sign-in",
+    authRequired: false,
   },
   {
     name: "Register",
     icon: BadgePlus,
-    path: "/register",
+    path: "/sign-up",
+    authRequired: false,
   },
 ];
 
@@ -59,6 +62,7 @@ const AppSidebar = () => {
   const { state, open, setOpen, isMobile } = useSidebar();
   const path = usePathname();
   const [isHovered, setIsHovered] = useState(false);
+  const { user } = useUser();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -71,7 +75,15 @@ const AppSidebar = () => {
   const isCollapsed = state === "collapsed";
   const shouldShowText = !isCollapsed || isHovered;
 
-  // On mobile, don't show the internal toggle button since it conflicts with SidebarTrigger
+  // Filter menu items based on authentication requirements //
+  const filteredMenuItems = MenuItem.filter((menu) => {
+    if (menu.authRequired === false) {
+      return !user;
+    }
+    return true;
+  });
+
+  // Show toggle button only on desktop //
   const showToggleButton = !isMobile;
 
   return (
@@ -139,7 +151,7 @@ const AppSidebar = () => {
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu>
-              {MenuItem.map((menu, i) => (
+              {filteredMenuItems.map((menu, i) => (
                 <SidebarMenuItem key={i}>
                   <SidebarMenuButton
                     asChild
@@ -170,8 +182,7 @@ const AppSidebar = () => {
             </SidebarMenu>
           </SidebarGroup>
         </SidebarContent>
-
-        <SidebarFooter className="border-t">
+        <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
@@ -203,6 +214,12 @@ const AppSidebar = () => {
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
+          <div className="flex items-center gap-2">
+            <UserButton />
+            <span className="text-sm font-medium truncate whitespace-nowrap">
+              {user?.firstName || user?.username || ""}
+            </span>
+          </div>
         </SidebarFooter>
       </Sidebar>
     </div>

@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AIModalsList } from "@/services/Shared";
 
 const ChatInput = () => {
   return (
@@ -47,10 +48,16 @@ const ChatInput = () => {
                 <Cpu className="text-gray-500 h-5 w-5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>Copilot</DropdownMenuItem>
-                <DropdownMenuItem>Gemini</DropdownMenuItem>
-                <DropdownMenuItem>DeepSeek</DropdownMenuItem>
-                <DropdownMenuItem>ChatGPT</DropdownMenuItem>
+                {AIModalsList.map((model, i) => (
+                  <DropdownMenuItem key={i}>
+                    <div className="mb-1">
+                      <span>{model.name}</span>
+                      <p className="text-xs text-gray-500">
+                        {model.description}
+                      </p>
+                    </div>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
             <Button variant="ghost">
