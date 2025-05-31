@@ -33,8 +33,10 @@ export default function RootLayout({
         <ThemeProvider defaultTheme="dark">
           <SidebarProvider>
             <AppSidebar />
-            <SidebarTrigger className="lg:hidden" />
-            {children}
+            <main className="w-full min-h-screen">
+              <SidebarTrigger className="lg:hidden fixed top-4 left-4 z-40" />
+              {children}
+            </main>
           </SidebarProvider>
         </ThemeProvider>
       </body>

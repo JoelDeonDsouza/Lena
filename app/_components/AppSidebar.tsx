@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Image from "next/image";
 import {
@@ -19,6 +20,8 @@ import {
   Boxes,
   LogIn,
   BadgePlus,
+  PanelLeftClose,
+  PanelLeft,
 } from "lucide-react";
 import { useTheme } from "@/hooks/theme-provider";
 import { usePathname } from "next/navigation";
@@ -53,104 +56,156 @@ const MenuItem = [
 
 const AppSidebar = () => {
   const { theme, setTheme } = useTheme();
+  const { state, open, setOpen, isMobile } = useSidebar();
+  const path = usePathname();
+  const [isHovered, setIsHovered] = useState(false);
+
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
-  const path = usePathname();
+
+  const toggleSidebar = () => {
+    setOpen(!open);
+  };
+
+  const isCollapsed = state === "collapsed";
+  const shouldShowText = !isCollapsed || isHovered;
+
+  // On mobile, don't show the internal toggle button since it conflicts with SidebarTrigger
+  const showToggleButton = !isMobile;
 
   return (
-    <Sidebar
-      collapsible="icon"
-      className="group/sidebar 
-        w-16 hover:w-64 transition-all duration-300 ease-in-out
-        md:w-16 md:hover:w-64
-        max-sm:w-64"
+    <div
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative"
     >
-      <SidebarHeader className="p-2 group-hover/sidebar:p-3 transition-all duration-300 max-sm:p-3">
-        <div className="flex flex-row items-center overflow-hidden w-full gap-1">
-          <div className="flex-shrink-0 flex items-center justify-center w-12 h-12">
-            <Image
-              src={"/logo.png"}
-              alt="Lena Logo"
-              width={48}
-              height={48}
-              className="rounded-lg"
-            />
-          </div>
-          <h1
-            className="text-xl font-semibold bg-gradient-to-r from-cyan-400 via-blue-500 to-pink-500 bg-clip-text text-transparent whitespace-nowrap 
-            opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 delay-100
-            max-sm:opacity-100 max-sm:delay-0"
-          >
-            Lena
-          </h1>
-        </div>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarMenu>
-            {MenuItem.map((menu, i) => (
-              <SidebarMenuItem key={i}>
-                <SidebarMenuButton
-                  asChild
-                  className={`w-full py-6 ${path?.includes(menu.path) ? "bg-gray-200 dark:bg-gray-800" : ""}`}
-                >
-                  <a
-                    href={menu.path}
-                    className="flex items-center 
-                    justify-center group-hover/sidebar:justify-start 
-                    max-sm:justify-start 
-                    w-full"
-                  >
-                    <menu.icon
-                      className="flex-shrink-0 w-5 h-5 
-                      ml-4 max-sm:ml-4"
-                    />
-                    <span
-                      className="ml-2 whitespace-nowrap 
-                      opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 delay-100
-                      max-sm:opacity-100 max-sm:delay-0"
-                    >
-                      {menu.name}
-                    </span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter className="p-2 group-hover/sidebar:p-3 transition-all duration-300 max-sm:p-3">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={toggleTheme}
-              className="w-full py-3"
-              title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-            >
-              <div
-                className="flex items-center 
-                justify-center group-hover/sidebar:justify-start
-                max-sm:justify-start"
-              >
-                {theme === "dark" ? (
-                  <Sun className="flex-shrink-0 w-5 h-5" />
-                ) : (
-                  <Moon className="flex-shrink-0 w-5 h-5" />
-                )}
-                <span
-                  className="ml-2 text-sm font-medium whitespace-nowrap 
-                  opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 delay-100
-                  max-sm:opacity-100 max-sm:delay-0"
-                >
-                  {theme === "dark" ? "Light mode" : "Dark mode"}
-                </span>
+      <Sidebar
+        collapsible="icon"
+        className={`border-r transition-all duration-200 ${
+          isCollapsed && isHovered ? "w-64" : ""
+        }`}
+      >
+        <SidebarHeader className="px-2.5 py-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 overflow-hidden">
+              {/* Logo is always visible */}
+              <div className="flex-shrink-0">
+                <Image
+                  src={"/logo.png"}
+                  alt="Lena Logo"
+                  width={32}
+                  height={32}
+                  className="rounded-lg"
+                />
               </div>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+              <div
+                className={`transition-all duration-200 overflow-hidden ${
+                  shouldShowText
+                    ? "opacity-100 max-w-none"
+                    : "opacity-0 max-w-0"
+                }`}
+              >
+                <h1 className="text-lg font-semibold bg-gradient-to-r from-cyan-400 via-blue-500 to-pink-500 bg-clip-text text-transparent whitespace-nowrap">
+                  Lena
+                </h1>
+              </div>
+            </div>
+            {/* Only show toggle button on desktop */}
+            {showToggleButton && (
+              <div
+                className={`transition-all duration-200 ${
+                  shouldShowText
+                    ? "opacity-100 max-w-none"
+                    : "opacity-0 max-w-0 overflow-hidden"
+                }`}
+              >
+                <SidebarMenuButton
+                  onClick={toggleSidebar}
+                  className="h-7 w-7 flex-shrink-0"
+                  size="sm"
+                >
+                  {isCollapsed ? (
+                    <PanelLeft className="h-4 w-4" />
+                  ) : (
+                    <PanelLeftClose className="h-4 w-4" />
+                  )}
+                </SidebarMenuButton>
+              </div>
+            )}
+          </div>
+        </SidebarHeader>
+
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarMenu>
+              {MenuItem.map((menu, i) => (
+                <SidebarMenuItem key={i}>
+                  <SidebarMenuButton
+                    asChild
+                    className={`${
+                      path?.includes(menu.path)
+                        ? "bg-gray-200 dark:bg-gray-800"
+                        : ""
+                    }`}
+                    tooltip={isCollapsed && !isHovered ? menu.name : undefined}
+                  >
+                    <a href={menu.path} className="flex items-center gap-2">
+                      <menu.icon className="h-4 w-4 flex-shrink-0" />
+                      <div
+                        className={`transition-all duration-200 overflow-hidden ${
+                          shouldShowText
+                            ? "opacity-100 max-w-none"
+                            : "opacity-0 max-w-0"
+                        }`}
+                      >
+                        <span className="truncate whitespace-nowrap">
+                          {menu.name}
+                        </span>
+                      </div>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
+
+        <SidebarFooter className="border-t">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                onClick={toggleTheme}
+                tooltip={
+                  isCollapsed && !isHovered
+                    ? `Switch to ${theme === "dark" ? "light" : "dark"} mode`
+                    : undefined
+                }
+              >
+                <div className="flex items-center gap-2">
+                  {theme === "dark" ? (
+                    <Sun className="h-4 w-4 flex-shrink-0" />
+                  ) : (
+                    <Moon className="h-4 w-4 flex-shrink-0" />
+                  )}
+                  <div
+                    className={`transition-all duration-200 overflow-hidden ${
+                      shouldShowText
+                        ? "opacity-100 max-w-none"
+                        : "opacity-0 max-w-0"
+                    }`}
+                  >
+                    <span className="text-sm font-medium truncate whitespace-nowrap">
+                      {theme === "dark" ? "Light mode" : "Dark mode"}
+                    </span>
+                  </div>
+                </div>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+    </div>
   );
 };
 

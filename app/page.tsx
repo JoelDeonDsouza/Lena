@@ -1,7 +1,9 @@
+import ChatInput from "./_components/ChatInput";
+
 export default function Home() {
   return (
-    <div>
-      <h1>Hello world</h1>
+    <div className="w-full">
+      <ChatInput />
     </div>
   );
 }
