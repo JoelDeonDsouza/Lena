@@ -12,11 +12,11 @@ import { AIModalsList } from "@/services/Shared";
 
 const ChatInput = () => {
   return (
-    <div className="flex flex-col h-screen items-center justify-center w-full px-4 sm:px-6">
+    <div className="flex flex-col h-screen items-center justify-end sm:justify-center w-full px-4 sm:px-6">
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold bg-gradient-to-r from-cyan-400 via-blue-500 to-pink-500 bg-clip-text text-transparent text-center mb-6 sm:mb-8 px-2">
         What can I help with?
       </h1>
-      <div className="w-full p-3 max-w-2xl border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg mt-8">
+      <div className="w-full p-3 max-w-2xl border border-gray-300 dark:border-gray-700 rounded-lg shadow-lg mt-2 mb-10 sm:mb-0">
         <div className="flex items-end justify-between">
           <Tabs defaultValue="search" className="w-[400px]">
             <TabsContent value="search">
