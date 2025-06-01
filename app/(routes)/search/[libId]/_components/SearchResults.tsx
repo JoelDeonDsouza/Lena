@@ -5,6 +5,7 @@ import { Brain } from 'lucide-react';
 import AIResponse from './AIResponse';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
+import { supabase } from '@/services/Supabase';
 
 interface SearchProps {
   searchQuery: LibraryData | null;
@@ -14,22 +15,71 @@ const resultTabs = [{ name: 'Lena', icon: Brain }];
 
 const SearchResults: React.FC<SearchProps> = ({ searchQuery }) => {
   const [activeTab, setActiveTab] = useState(resultTabs[0].name);
+  const [aiGerneratedResponse, setAiGeneratedResponse] = useState<LibraryData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { libId } = useParams();
 
   useEffect(() => {
     if (searchQuery) {
       setActiveTab(resultTabs[0].name);
-      generateAiResponse();
+      handleAIResponseGeneration();
     }
   }, [searchQuery]);
 
-  // Generate AI response using the LLM model //
+  const handleAIResponseGeneration = async () => {
+    setIsLoading(true);
+    setError(null);
+    setAiGeneratedResponse(null);
+    try {
+      const result = await generateAiResponse();
+      if (result.data && result.data.aiResp) {
+        setAiGeneratedResponse(result.data as LibraryData);
+      } else {
+        await GetAIResponse();
+      }
+    } catch (err) {
+      console.error('Error generating AI response:', err);
+      setError('Failed to generate AI response. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const generateAiResponse = async () => {
     const result = await axios.post('/api/llm-model', {
       searchInput: searchQuery?.searchInput,
       recordId: libId,
     });
-    return result.data;
+    return result;
+  };
+
+  // Fetch AI response from Supabase with polling //
+  const GetAIResponse = async (maxRetries = 10, delay = 1000): Promise<void> => {
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        const { data: Library, error } = await supabase
+          .from('Library')
+          .select('*')
+          .eq('libId', libId);
+        if (error) {
+          console.error('Error fetching library data:', error);
+          throw new Error('Database fetch failed');
+        }
+        if (Library && Library.length > 0 && Library[0].aiResp) {
+          setAiGeneratedResponse(Library[0] as LibraryData);
+          return;
+        }
+        if (attempt < maxRetries - 1) {
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+      } catch (error) {
+        console.error('Unexpected error:', error);
+        if (attempt === maxRetries - 1) {
+          throw error; // Only throw on final attempt
+        }
+      }
+    }
+    throw new Error('AI response not available after multiple attempts');
   };
 
   return (
@@ -74,8 +124,17 @@ const SearchResults: React.FC<SearchProps> = ({ searchQuery }) => {
           ))}
         </div>
       </div>
+
       {/* Tab content area */}
-      <div>{activeTab === 'Lena' ? <AIResponse /> : null}</div>
+      <div>
+        {activeTab === 'Lena' && (
+          <AIResponse
+            aiGerneratedResponse={aiGerneratedResponse}
+            isLoading={isLoading}
+            error={error}
+          />
+        )}
+      </div>
     </div>
   );
 };

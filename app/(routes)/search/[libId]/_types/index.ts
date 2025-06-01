@@ -5,4 +5,5 @@ export interface LibraryData {
   userEmail: string;
   type: string;
   libId: string;
+  aiResp?: string | null;
 }

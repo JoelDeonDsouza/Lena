@@ -27,9 +27,7 @@ const SearchOutput: React.FC = () => {
         console.error('Error fetching library data:', error);
         return;
       }
-
       if (Library && Library.length > 0) {
-        console.log('Library data:', Library[0]);
         setSearchQuery(Library[0] as LibraryData);
       }
     } catch (error) {

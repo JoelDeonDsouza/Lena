@@ -46,7 +46,6 @@ export default function RootLayout({
               <AppSidebar />
               <main className="w-full min-h-screen">
               <SidebarTrigger className="lg:hidden fixed top-4 left-4 z-40 border border-gray-300 rounded-md p-4 text-xl" />
-
                 <Provider>{children}</Provider>
               </main>
             </SidebarProvider>
