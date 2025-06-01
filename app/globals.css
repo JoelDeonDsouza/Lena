@@ -3,6 +3,33 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  --font-wdxl-lubrifont: "WDXL Lubrifont TC", ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+body {
+  font-family: var(--font-wdxl-lubrifont);
+}
+
+.font-sans {
+  font-family: var(--font-wdxl-lubrifont);
+}
+
+.font-mono {
+  font-family: var(--font-geist-mono);
+}
+
+/* Hide scrollbars for all browsers */
+.hide-scrollbar {
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; 
+}
+
+
 @layer base {
   :root {
     --sidebar: oklch(0.985 0 0);

@@ -62,7 +62,7 @@ const AppSidebar = () => {
   const { state, open, setOpen, isMobile } = useSidebar();
   const path = usePathname();
   const [isHovered, setIsHovered] = useState(false);
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -77,13 +77,16 @@ const AppSidebar = () => {
 
   // Filter menu items based on authentication requirements //
   const filteredMenuItems = MenuItem.filter((menu) => {
+    if (!isLoaded) {
+      return menu.authRequired !== false;
+    }
     if (menu.authRequired === false) {
       return !user;
     }
     return true;
   });
 
-  // Show toggle button only on desktop //
+  // Mobile view does not show the toggle button //
   const showToggleButton = !isMobile;
 
   return (
@@ -118,7 +121,7 @@ const AppSidebar = () => {
                     : "opacity-0 max-w-0"
                 }`}
               >
-                <h1 className="text-lg font-semibold bg-gradient-to-r from-cyan-400 via-blue-500 to-pink-500 bg-clip-text text-transparent whitespace-nowrap">
+                <h1 className="text-xl font-semibold bg-gradient-to-r from-cyan-400 via-blue-500 to-pink-500 bg-clip-text text-transparent whitespace-nowrap">
                   Lena
                 </h1>
               </div>
@@ -138,16 +141,16 @@ const AppSidebar = () => {
                   size="sm"
                 >
                   {isCollapsed ? (
-                    <PanelLeft className="h-4 w-4" />
+                    <PanelLeft className="h-5 w-5" />
                   ) : (
-                    <PanelLeftClose className="h-4 w-4" />
+                    <PanelLeftClose className="h-5 w-5" />
                   )}
                 </SidebarMenuButton>
               </div>
             )}
           </div>
         </SidebarHeader>
-
+        {/* Render the sidebar content only if not collapsed */}
         <SidebarContent>
           <SidebarGroup>
             <SidebarMenu>
@@ -163,7 +166,7 @@ const AppSidebar = () => {
                     tooltip={isCollapsed && !isHovered ? menu.name : undefined}
                   >
                     <a href={menu.path} className="flex items-center gap-2">
-                      <menu.icon className="h-4 w-4 flex-shrink-0" />
+                      <menu.icon className="h-5 w-5 flex-shrink-0" />
                       <div
                         className={`transition-all duration-200 overflow-hidden ${
                           shouldShowText
@@ -171,7 +174,7 @@ const AppSidebar = () => {
                             : "opacity-0 max-w-0"
                         }`}
                       >
-                        <span className="truncate whitespace-nowrap">
+                        <span className="text-base truncate whitespace-nowrap">
                           {menu.name}
                         </span>
                       </div>
@@ -195,9 +198,9 @@ const AppSidebar = () => {
               >
                 <div className="flex items-center gap-2">
                   {theme === "dark" ? (
-                    <Sun className="h-4 w-4 flex-shrink-0" />
+                    <Sun className="h-5 w-5 flex-shrink-0" />
                   ) : (
-                    <Moon className="h-4 w-4 flex-shrink-0" />
+                    <Moon className="h-5 w-5 flex-shrink-0" />
                   )}
                   <div
                     className={`transition-all duration-200 overflow-hidden ${
@@ -206,7 +209,7 @@ const AppSidebar = () => {
                         : "opacity-0 max-w-0"
                     }`}
                   >
-                    <span className="text-sm font-medium truncate whitespace-nowrap">
+                    <span className="text-base font-medium truncate whitespace-nowrap">
                       {theme === "dark" ? "Light mode" : "Dark mode"}
                     </span>
                   </div>
@@ -214,12 +217,15 @@ const AppSidebar = () => {
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
-          <div className="flex items-center gap-2">
-            <UserButton />
-            <span className="text-sm font-medium truncate whitespace-nowrap">
-              {user?.firstName || user?.username || ""}
-            </span>
-          </div>
+          {/* Only show user info when loaded and user exists */}
+          {isLoaded && user && (
+            <div className="flex items-center gap-2">
+              <UserButton />
+              <span className="text-base font-medium truncate whitespace-nowrap">
+                {user?.firstName || user?.username || ""}
+              </span>
+            </div>
+          )}
         </SidebarFooter>
       </Sidebar>
     </div>
