@@ -1,3 +1,10 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This file contains the Provider component for managing user data in the application.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";

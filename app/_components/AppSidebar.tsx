@@ -1,5 +1,12 @@
-"use client";
-import React, { useState } from "react";
+/**
+ * @author: Joel Deon Dsouza
+ * @description: Sidebar component for the application, which includes navigation links, theme toggle, and user information.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
+'use client';
+import React, { useState } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -10,49 +17,29 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar";
-import Image from "next/image";
-import {
-  Moon,
-  Sun,
-  Plus,
-  Telescope,
-  Boxes,
-  LogIn,
-  BadgePlus,
-  PanelLeftClose,
-  PanelLeft,
-} from "lucide-react";
-import { useTheme } from "@/hooks/theme-provider";
-import { usePathname } from "next/navigation";
-import { UserButton, useUser } from "@clerk/nextjs";
+} from '@/components/ui/sidebar';
+import Image from 'next/image';
+import { Moon, Sun, Plus, LogIn, BadgePlus, PanelLeftClose, PanelLeft } from 'lucide-react';
+import { useTheme } from '@/hooks/theme-provider';
+import { usePathname } from 'next/navigation';
+import { UserButton, useUser } from '@clerk/nextjs';
 
 const MenuItem = [
   {
-    name: "Home",
+    name: 'Home',
     icon: Plus,
-    path: "/",
+    path: '/',
   },
   {
-    name: "Discover",
-    icon: Telescope,
-    path: "/discover",
-  },
-  {
-    name: "Spaces",
-    icon: Boxes,
-    path: "/spaces",
-  },
-  {
-    name: "Login",
+    name: 'Login',
     icon: LogIn,
-    path: "/sign-in",
+    path: '/sign-in',
     authRequired: false,
   },
   {
-    name: "Register",
+    name: 'Register',
     icon: BadgePlus,
-    path: "/sign-up",
+    path: '/sign-up',
     authRequired: false,
   },
 ];
@@ -65,14 +52,14 @@ const AppSidebar = () => {
   const { user, isLoaded } = useUser();
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   const toggleSidebar = () => {
     setOpen(!open);
   };
 
-  const isCollapsed = state === "collapsed";
+  const isCollapsed = state === 'collapsed';
   const shouldShowText = !isCollapsed || isHovered;
 
   // Filter menu items based on authentication requirements //
@@ -97,9 +84,7 @@ const AppSidebar = () => {
     >
       <Sidebar
         collapsible="icon"
-        className={`border-r transition-all duration-200 ${
-          isCollapsed && isHovered ? "w-64" : ""
-        }`}
+        className={`border-r transition-all duration-200 ${isCollapsed && isHovered ? 'w-64' : ''}`}
       >
         <SidebarHeader className="px-2.5 py-2">
           <div className="flex items-center justify-between">
@@ -107,7 +92,7 @@ const AppSidebar = () => {
               {/* Logo is always visible */}
               <div className="flex-shrink-0">
                 <Image
-                  src={"/logo.png"}
+                  src={'/logo.png'}
                   alt="Lena Logo"
                   width={32}
                   height={32}
@@ -116,9 +101,7 @@ const AppSidebar = () => {
               </div>
               <div
                 className={`transition-all duration-200 overflow-hidden ${
-                  shouldShowText
-                    ? "opacity-100 max-w-none"
-                    : "opacity-0 max-w-0"
+                  shouldShowText ? 'opacity-100 max-w-none' : 'opacity-0 max-w-0'
                 }`}
               >
                 <h1 className="text-xl font-semibold bg-gradient-to-r from-cyan-400 via-blue-500 to-pink-500 bg-clip-text text-transparent whitespace-nowrap">
@@ -130,9 +113,7 @@ const AppSidebar = () => {
             {showToggleButton && (
               <div
                 className={`transition-all duration-200 ${
-                  shouldShowText
-                    ? "opacity-100 max-w-none"
-                    : "opacity-0 max-w-0 overflow-hidden"
+                  shouldShowText ? 'opacity-100 max-w-none' : 'opacity-0 max-w-0 overflow-hidden'
                 }`}
               >
                 <SidebarMenuButton
@@ -158,25 +139,17 @@ const AppSidebar = () => {
                 <SidebarMenuItem key={i}>
                   <SidebarMenuButton
                     asChild
-                    className={`${
-                      path?.includes(menu.path)
-                        ? "bg-gray-200 dark:bg-gray-800"
-                        : ""
-                    }`}
+                    className={`${path?.includes(menu.path) ? 'bg-gray-200 dark:bg-gray-800' : ''}`}
                     tooltip={isCollapsed && !isHovered ? menu.name : undefined}
                   >
                     <a href={menu.path} className="flex items-center gap-2">
                       <menu.icon className="h-5 w-5 flex-shrink-0" />
                       <div
                         className={`transition-all duration-200 overflow-hidden ${
-                          shouldShowText
-                            ? "opacity-100 max-w-none"
-                            : "opacity-0 max-w-0"
+                          shouldShowText ? 'opacity-100 max-w-none' : 'opacity-0 max-w-0'
                         }`}
                       >
-                        <span className="text-base truncate whitespace-nowrap">
-                          {menu.name}
-                        </span>
+                        <span className="text-base truncate whitespace-nowrap">{menu.name}</span>
                       </div>
                     </a>
                   </SidebarMenuButton>
@@ -192,25 +165,23 @@ const AppSidebar = () => {
                 onClick={toggleTheme}
                 tooltip={
                   isCollapsed && !isHovered
-                    ? `Switch to ${theme === "dark" ? "light" : "dark"} mode`
+                    ? `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`
                     : undefined
                 }
               >
                 <div className="flex items-center gap-2">
-                  {theme === "dark" ? (
+                  {theme === 'dark' ? (
                     <Sun className="h-5 w-5 flex-shrink-0" />
                   ) : (
                     <Moon className="h-5 w-5 flex-shrink-0" />
                   )}
                   <div
                     className={`transition-all duration-200 overflow-hidden ${
-                      shouldShowText
-                        ? "opacity-100 max-w-none"
-                        : "opacity-0 max-w-0"
+                      shouldShowText ? 'opacity-100 max-w-none' : 'opacity-0 max-w-0'
                     }`}
                   >
                     <span className="text-base font-medium truncate whitespace-nowrap">
-                      {theme === "dark" ? "Light mode" : "Dark mode"}
+                      {theme === 'dark' ? 'Light mode' : 'Dark mode'}
                     </span>
                   </div>
                 </div>
@@ -222,7 +193,7 @@ const AppSidebar = () => {
             <div className="flex items-center gap-2">
               <UserButton />
               <span className="text-base font-medium truncate whitespace-nowrap">
-                {user?.firstName || user?.username || ""}
+                {user?.firstName || user?.username || ''}
               </span>
             </div>
           )}

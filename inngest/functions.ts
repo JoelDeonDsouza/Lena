@@ -1,3 +1,10 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This file contains Ingest functions for handling AI model queries and saving responses to the database.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
 import { supabase } from '@/services/Supabase';
 import { inngest } from './client';
 
@@ -41,7 +48,6 @@ export const llmModel = inngest.createFunction(
       if (!existingRecord) {
         throw new Error(`No record found with libId: ${event.data.recordId}`);
       }
-      console.log('Record exists, proceeding with update for libId:', existingRecord.libId);
       const part = aiResponse?.candidates?.[0]?.content?.parts?.[0];
       const aiText = part && 'text' in part ? part.text : null;
       const { data, error } = await supabase
@@ -58,7 +64,6 @@ export const llmModel = inngest.createFunction(
           `Update succeeded but no rows were affected for libId: ${event.data.recordId}`,
         );
       }
-      console.log('Successfully updated record:', data);
       return data;
     });
     return aiResponse;

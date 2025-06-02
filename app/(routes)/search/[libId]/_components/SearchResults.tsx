@@ -1,3 +1,10 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: Handles the search results display and AI response generation for the Lena application.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { LibraryData } from '../_types';

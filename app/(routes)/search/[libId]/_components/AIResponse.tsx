@@ -1,3 +1,10 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: AI Response component that displays the AI-generated response, loading state, or error messages.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
 import React from 'react';
 import { LibraryData } from '../_types';
 
@@ -7,10 +14,10 @@ interface AIResponseProps {
   error?: string | null;
 }
 
-const AIResponse: React.FC<AIResponseProps> = ({ 
-  aiGerneratedResponse, 
+const AIResponse: React.FC<AIResponseProps> = ({
+  aiGerneratedResponse,
   isLoading = false,
-  error = null
+  error = null,
 }) => {
   // Error state
   if (error) {

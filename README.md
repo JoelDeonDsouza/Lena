@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Lena
 
-## Getting Started
+Lena is a user interface for interacting with open LLM models, enabling users to explore and execute their capabilities.
 
-First, run the development server:
+## Tech Stack
+
+**Client:** Next.js, Tailwind css, Typescript, Clerk, Supabase, Inngest
+
+## Screenshots
+
+![App Screenshot](/public/demo.png)
+
+![App Screenshot](/public/demo2.png)
+
+![App Screenshot](/public/demo3.png)
+
+![App Screenshot](/public/demo4.png)
+
+![App Screenshot](/public/demo5.png)
+
+### Features
+
+- **Modern Stack** – Built with Next.js, Tailwind CSS, and TypeScript for scalability, speed, and maintainability
+- **Authentication** – Secure user auth and session management via Clerk
+- **Database & Realtime** – Supabase integration for database, auth, and real-time functionality
+- **Event-Driven** – Background tasks and workflows handled seamlessly using Inngest
+- **Responsive UI** – Mobile-first, fully responsive design with Tailwind CSS
+- **Smooth Animations** – Fluid transitions and animations for a polished UX
+- **Type-Safe** – Full TypeScript support with IntelliSense and static type checking
+- **Accessible** – Follows accessibility best practices for inclusive design
+- **Customizable** – Easily extendable with custom rendering, styles, and logic
+
+---
+
+### Available AI Models
+
+| ID  | Name     | Description            |
+| --- | -------- | ---------------------- |
+| 1   | DeepSeek | DeepSeek: R1 0528      |
+| 2   | Mistral  | Mistral: Devstral      |
+| 3   | Gemini   | Google: Gemini 2.0     |
+| 4   | Llama 4  | Meta: Llama 4 Maverick |
+
+## Run Locally
+
+Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/JoelDeonDsouza/Lena.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Go to the project directory
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  cd lena
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies
 
-## Learn More
+```bash
+  npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+  npm run dev
+```

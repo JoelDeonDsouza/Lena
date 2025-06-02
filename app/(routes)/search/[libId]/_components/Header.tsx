@@ -1,3 +1,10 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: Header component for the search page, displaying the time since the search was created and a share button.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
 import { Clock, Share } from 'lucide-react';
 import React from 'react';
 import { LibraryData } from '../_types';

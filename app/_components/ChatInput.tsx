@@ -1,3 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/**
+ * @author: Joel Deon Dsouza
+ * @description: Interactive chat input component for searching and analyzing data, with support for AI models and file attachments.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
 'use client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -38,7 +46,6 @@ const ChatInput = () => {
           },
         ])
         .select();
-      console.log(result);
       router.push(`/search/${libId}`);
       setUserSearch('');
     } catch (error) {

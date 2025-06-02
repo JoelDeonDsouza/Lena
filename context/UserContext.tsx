@@ -1,5 +1,12 @@
-import { createContext } from "react";
-import { User } from "@clerk/nextjs/server";
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This file containes the UserContext for managing user data in the application.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
+import { createContext } from 'react';
+import { User } from '@clerk/nextjs/server';
 
 interface UserData {
   id: string;

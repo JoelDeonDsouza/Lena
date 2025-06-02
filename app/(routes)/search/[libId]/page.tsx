@@ -1,3 +1,10 @@
+/**
+ * @author: Joel Deon Dsouza
+ * @description: This file conatins the SearchOutput component, which fetches and displays search results based on a library ID.
+ * @version: 1.0.0
+ * @date: 2025-06-02
+ */
+
 'use client';
 import { supabase } from '@/services/Supabase';
 import { useParams } from 'next/navigation';
