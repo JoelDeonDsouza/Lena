@@ -2,6 +2,12 @@
 
 Lena is a user interface for interacting with open LLM models, enabling users to explore and execute their capabilities.
 
+## Live Demo
+
+```bash
+   https://lena-brown.vercel.app/
+```
+
 ## Tech Stack
 
 **Client:** Next.js, Tailwind css, Typescript, Clerk, Supabase, Inngest
